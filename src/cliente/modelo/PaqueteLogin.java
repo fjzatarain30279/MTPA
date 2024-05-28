@@ -8,6 +8,6 @@ package cliente.modelo;
  *
  * @author javier
  */
-public class PaqueteDatos {
+public class PaqueteLogin {
     
 }

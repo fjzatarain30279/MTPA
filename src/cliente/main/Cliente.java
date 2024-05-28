@@ -3,42 +3,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package cliente.main;
-import cliente.modelo.PaqueteDatos;
+import cliente.modelo.PaqueteLogin;
+import cliente.modelo.PaquetePartida;
+import cliente.modelo.PaqueteUsr;
 import cliente.vista.GestorVistas;
-import cliente.vista.VistaMenuInicial;
-import cliente.vista.VistaTablero;
 
 public class Cliente {
-    public static final int PUERTO = 2000;
+    
     private static GestorVistas gestor;
-    private static PaqueteDatos modelo;
+    private static PaquetePartida modeloPartida;
+    private static PaqueteLogin modeloLogin;
+    private static PaqueteUsr modeloUsr;
   
     public static void main(String[] args) {
               
         gestor = new GestorVistas();
-        modelo = new PaqueteDatos();
+        modeloPartida = new PaquetePartida();
+        modeloLogin = new PaqueteLogin();
+        modeloUsr = new PaqueteUsr();
         gestor.mostrarVistaMenu();
-        
-     
-        String linea = null;
-        
-        try{
-            java.io.BufferedReader tec =
-                    new java.io.BufferedReader(
-                            new java.io.InputStreamReader(System.in));
-            java.net.Socket miSocket = new java.net.Socket("localhost", PUERTO);
-            java.io.BufferedReader inred =
-                    new java.io.BufferedReader(
-                            new java.io.InputStreamReader(miSocket.getInputStream()));
-            java.io.PrintStream outred =
-                    new java.io.PrintStream(miSocket.getOutputStream());
-            while ((linea = tec.readLine()) != null) { // lee de teclado
-                outred.println(linea); // envia al servidor
-                        linea = inred.readLine(); // lee del servidor
-                System.out.println("Recibido: "+linea); // eco local del servidor
-            }
-        } catch (Exception e) { e.printStackTrace(); }
-    }
+    } 
 /**
      * Metodo encargado de devolver el gestor de Vistas
      * @return gestor
@@ -50,15 +34,9 @@ public class Cliente {
      * Metodo encargado de devolver el Modelo
      * @return modelo
      */
-    public static PaqueteDatos getModelo() {
-        return modelo;
+    public static PaquetePartida getModelo() {
+        return modeloPartida;
     }
-    /**
-     * Metodo encargado de actualizar el modelo del Main
-     * @param model 
-     */
-    public static void setModelo(PaqueteDatos model){
-        Cliente.modelo = model;
-    }
+    
 
 }
