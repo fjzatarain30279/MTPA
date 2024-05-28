@@ -6,46 +6,47 @@ package cliente.vista;
 
 import cliente.main.Cliente;
 import cliente.modelo.PaquetePartida;
+
 /**
  *
  * @author javier
  */
 public class ControladorMenu {
-    
+
     public static final int PUERTO = 2000;
     private VistaMenuInicial vista;
     private PaquetePartida modelo;
-    
-    public ControladorMenu(VistaMenuInicial vista){
+
+    public ControladorMenu(VistaMenuInicial vista) {
         this.vista = vista;
         modelo = Cliente.getModelo();
-        
+
     }
-    
-    public void procesaEventoCrearUsuario(){
-        String linea = null;
-        
-        try{
-            java.io.BufferedReader tec =
-                    new java.io.BufferedReader(
-                            new java.io.InputStreamReader(System.in));
-            java.net.Socket miSocket = new java.net.Socket("localhost", PUERTO);
-            java.io.BufferedReader inred =
-                    new java.io.BufferedReader(
-                            new java.io.InputStreamReader(miSocket.getInputStream()));
-            java.io.PrintStream outred =
-                    new java.io.PrintStream(miSocket.getOutputStream());
-            while ((linea = tec.readLine()) != null) { // lee de teclado
-                outred.println(linea); // envia al servidor
-                        linea = inred.readLine(); // lee del servidor
-                System.out.println("Recibido: "+linea); // eco local del servidor
+
+    public void procesaEventoCrearUsuario() {
+        String usr = "";
+        String pwd = "";
+        usr = vista.getUsr();
+        pwd = vista.getPswd();
+        if (usr.length() < 1) {
+            vista.setErrMessage("Longitud muy pequeña");
+        } else if (pwd.length() < 1) {
+            vista.setErrMessage("Longitud password muy pequeña");
+        } else {
+            try {
+                vista.setErrMessage("Contactando con el servidor...");
+                java.net.Socket miSocket = new java.net.Socket("localhost", PUERTO);
+                java.io.PrintStream outred = new java.io.PrintStream(miSocket.getOutputStream());
+                outred.println(usr.concat(pwd)); // envia al servidor
+                //vista.setErrMessage("Envio correcto de datos...");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        }
     }
-    
-    
-    public void procesaEventoIniciarSesion(){
-       
+
+    public void procesaEventoIniciarSesion() {
+
     }
-   
+
 }

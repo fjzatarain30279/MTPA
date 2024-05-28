@@ -66,11 +66,7 @@ public class VistaMenuInicial extends javax.swing.JFrame {
         jPanel2.add(label1);
 
         jTextField3.setFont(new java.awt.Font("Liberation Sans", 0, 36)); // NOI18N
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
-            }
-        });
+        jTextField3.setActionCommand("<Not Set>");
         jPanel2.add(jTextField3);
 
         label2.setBackground(new java.awt.Color(102, 102, 102));
@@ -80,11 +76,6 @@ public class VistaMenuInicial extends javax.swing.JFrame {
         jPanel2.add(label2);
 
         jPasswordField1.setFont(new java.awt.Font("Liberation Sans", 0, 36)); // NOI18N
-        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordField1ActionPerformed(evt);
-            }
-        });
         jPanel2.add(jPasswordField1);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -140,22 +131,24 @@ public class VistaMenuInicial extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
-
     private void crearCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearCuentaActionPerformed
         controlador.procesaEventoCrearUsuario();
     }//GEN-LAST:event_crearCuentaActionPerformed
-
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordField1ActionPerformed
 
     private void iniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarSesionActionPerformed
         controlador.procesaEventoIniciarSesion();
     }//GEN-LAST:event_iniciarSesionActionPerformed
 
+    public String getUsr() throws IllegalArgumentException{
+        return jTextField3.getText();
+    }
+    
+    public String getPswd() {
+        return jPasswordField1.getText();
+    }
+    public void setErrMessage(String message){
+        jLabel2.setText(message);
+    }
     /**
      * @param args the command line arguments
      */
