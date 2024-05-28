@@ -25,6 +25,17 @@ public class GestorVistas {
         estadoActual.setVisible(true);
     }
     /**
+     * Muestra la vista de la lista de usuarios y cierra las otras
+     */
+    public void mostrarVistaUsuarios() {
+        if (estadoActual!=null) {
+            estadoActual.setVisible(false);
+            estadoActual.dispose();
+        }
+        estadoActual= new VistaUsuarios();
+        estadoActual.setVisible(true);
+    }
+    /**
      * Muestra la vista del tablero de juego y cierra las otras
      */
     public void mostrarVistaTablero() {

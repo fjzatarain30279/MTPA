@@ -34,8 +34,14 @@ public class Cliente {
      * Metodo encargado de devolver el Modelo
      * @return modelo
      */
-    public static PaquetePartida getModelo() {
+    public static PaquetePartida getModeloPartida() {
         return modeloPartida;
+    }
+    public static PaqueteUsr getModeloUsr() {
+        return modeloUsr;
+    }
+    public static PaqueteLogin getModeloLogin() {
+        return modeloLogin;
     }
     
 
