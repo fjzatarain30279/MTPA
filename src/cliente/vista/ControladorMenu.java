@@ -24,22 +24,29 @@ public class ControladorMenu {
     }
 
     public void procesaEventoCrearUsuario() {
-        String usr = "";
-        String pwd = "";
-        usr = vista.getUsr();
-        pwd = vista.getPswd();
-        if (usr.length() < 1) {
+        modelo.setUsuario(vista.getUsr());
+        modelo.setPassword(vista.getPswd());
+        
+        if (modelo.getUsuario().length() < 1) {
             vista.setErrMessage("Longitud muy pequeña");
-        } else if (pwd.length() < 1) {
+        } else if (modelo.getPassword().length() < 1) {
             vista.setErrMessage("Longitud password muy pequeña");
         } else {
             try {
                 vista.setErrMessage("Creando cuenta en el servidor...");
                 java.net.Socket miSocket = new java.net.Socket("localhost", PUERTO);
                 java.io.PrintStream outred = new java.io.PrintStream(miSocket.getOutputStream());
-                outred.println(usr + ";" + pwd); // envia al servidor
-                //vista.setErrMessage("Envio correcto de datos...");
+                outred.println(modelo.toString()); // envia al servidor
+                java.io.BufferedReader inred = new java.io.BufferedReader(new java.io.InputStreamReader(miSocket.getInputStream()));
+                String linea = inred.readLine();
+                String[] aux = linea.split(";");
+                System.out.println(aux[2]);
+                if(Integer.parseInt(aux[3])==1){
+                    vista.setErrMessage("EL USUARIO YA EXISTE");
+                }else{
+                Cliente.setSocket(miSocket);
                 Cliente.getGestorVistas().mostrarVistaUsuarios();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -47,21 +54,20 @@ public class ControladorMenu {
     }
 
     public void procesaEventoIniciarSesion() {
-        String usr = "";
-        String pwd = "";
-        usr = vista.getUsr();
-        pwd = vista.getPswd();
-        if (usr.length() < 1) {
+        modelo.setUsuario(vista.getUsr());
+        modelo.setPassword(vista.getPswd());
+        
+        if (modelo.getUsuario().length() < 1) {
             vista.setErrMessage("Longitud muy pequeña");
-        } else if (pwd.length() < 1) {
+        } else if (modelo.getPassword().length() < 1) {
             vista.setErrMessage("Longitud password muy pequeña");
-        } else {
+        }else {
             try {
                 vista.setErrMessage("Contactando con el servidor...");
                 java.net.Socket miSocket = new java.net.Socket("localhost", PUERTO);
                 java.io.PrintStream outred = new java.io.PrintStream(miSocket.getOutputStream());
-                outred.println(usr.concat(pwd)); // envia al servidor
-                //vista.setErrMessage("Envio correcto de datos...");
+                outred.println(modelo.toString()); // envia al servidor
+                Cliente.setSocket(miSocket);
                 Cliente.getGestorVistas().mostrarVistaUsuarios();
 
             } catch (Exception e) {

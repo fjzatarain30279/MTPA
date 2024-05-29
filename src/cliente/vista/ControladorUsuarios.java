@@ -25,7 +25,7 @@ public class ControladorUsuarios {
     public void procesaEventoSeleccion(){
         
         try{
-            java.net.Socket miSocket = new java.net.Socket("localhost", PUERTO);
+            java.net.Socket miSocket = Cliente.getSocket();
                 java.io.PrintStream outred = new java.io.PrintStream(miSocket.getOutputStream());
                 outred.println(vista.getUsr()); // envia al servidor
                 //vista.setErrMessage("Envio correcto de datos...");
