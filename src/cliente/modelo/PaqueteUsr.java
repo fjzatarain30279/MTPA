@@ -11,5 +11,5 @@ import java.util.ArrayList;
  * @author javier
  */
 public class PaqueteUsr {
-    private ArrayList usuarios;
+    private ArrayList listaUsuarios;
 }
