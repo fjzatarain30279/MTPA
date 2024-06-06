@@ -4,10 +4,12 @@
  */
 package cliente.modelo;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author javier
  */
 public class PaqueteUsr {
-    
+    private ArrayList usuarios;
 }
