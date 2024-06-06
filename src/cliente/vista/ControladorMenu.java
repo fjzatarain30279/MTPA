@@ -26,6 +26,7 @@ public class ControladorMenu {
     public void procesaEventoCrearUsuario() {
         modelo.setUsuario(vista.getUsr());
         modelo.setPassword(vista.getPswd());
+        modelo.setComprobado(-1);
         
         if (modelo.getUsuario().length() < 1) {
             vista.setErrMessage("Longitud muy pequeña");
@@ -41,7 +42,7 @@ public class ControladorMenu {
                 String linea = inred.readLine();
                 String[] aux = linea.split(";");
                 System.out.println(aux[2]);
-                if(Integer.parseInt(aux[3])==1){
+                if(Integer.parseInt(aux[2])==1){
                     vista.setErrMessage("EL USUARIO YA EXISTE");
                 }else{
                 Cliente.setSocket(miSocket);
