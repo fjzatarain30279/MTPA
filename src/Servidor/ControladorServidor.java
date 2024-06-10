@@ -1,5 +1,6 @@
 package Servidor;
 
+import java.io.IOException;
 import Servidor.paquetes.PaqueteLogin;
 import Servidor.paquetes.PaquetePartida;
 import java.net.ServerSocket;
@@ -16,10 +17,11 @@ public class ControladorServidor
     private static ArrayList<PaquetePartida> listaPartidas;
     private static ArrayList<String> ranking;
     private Thread t;
+    private boolean active = true;
 
     public ControladorServidor() throws Exception {
         servidor = new ServerSocket(2000);
-        t = new Thread(this);
+        t = new Thread(this, "ControladorServidor");
         t.start();
     }
 
@@ -31,8 +33,9 @@ public class ControladorServidor
     }
 
     public void startListeningUsers() throws Exception {
-        listaUsuarios.put("usr", "pwd");
-        while (true) {
+                setListaUsuarios(LectorFicheros.lecturaFichero("Usuarios.txt"));
+                setRanking(LectorFicheros.lecturaPuntuaciones("Puntuaciones.txt"));
+        while (isActive()) {
             System.out.println("Esperando clientes....");
             Socket sck = servidor.accept();
             System.out.println("Un cliente conectado...");
@@ -94,7 +97,7 @@ public class ControladorServidor
         }
     }
 
-    public void creaUsr(String usr, String pwd) {
+    public synchronized void creaUsr(String usr, String pwd) {
         listaUsuarios.put(usr, pwd);
     }
 
@@ -106,6 +109,12 @@ public class ControladorServidor
         } else {
             return 3;
         }
+    }
+    
+    public void guardaDatos(){
+        LectorFicheros.guardaUsr("Usuarios.txt", listaUsuarios);
+        LectorFicheros.guardaPuntuaciones("Puntuaciones.txt", ranking);
+        LectorFicheros.guardaPartidas("Partidas.txt", listaPartidas);
     }
 
     public HashMap<String, String> getListaUsuarios() {
@@ -140,5 +149,17 @@ public class ControladorServidor
         ControladorServidor.ranking = ranking;
     }
     
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) throws IOException {
+        this.active = active;
+        
+    }
+    
+    public Thread getT() {
+        return t;
+    }
     
 }

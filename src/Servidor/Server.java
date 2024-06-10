@@ -39,6 +39,9 @@ public class Server {
                     break;
                 case 0:
                     System.out.println("Saliendo del programa...");
+                    srv.guardaDatos();
+                    srv.setActive(false);
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("Opción no válida. Intenta de nuevo.");
