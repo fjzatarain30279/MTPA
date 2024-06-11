@@ -33,8 +33,8 @@ public class ControladorServidor
     }
 
     public void startListeningUsers() throws Exception {
-                setListaUsuarios(LectorFicheros.lecturaFichero("Usuarios.txt"));
-                setRanking(LectorFicheros.lecturaPuntuaciones("Puntuaciones.txt"));
+        setListaUsuarios(LectorFicheros.lecturaFichero("Usuarios.txt"));
+        setRanking(LectorFicheros.lecturaPuntuaciones("Puntuaciones.txt"));
         while (isActive()) {
             System.out.println("Esperando clientes....");
             Socket sck = servidor.accept();
@@ -84,6 +84,8 @@ public class ControladorServidor
             s.start();
 
         }
+        System.out.println("Servidor.ControladorServidor.startListeningUsers()");
+
     }
 
     public static void difusionMensaje(byte[] mensaje) {
@@ -110,8 +112,8 @@ public class ControladorServidor
             return 3;
         }
     }
-    
-    public void guardaDatos(){
+
+    public void guardaDatos() {
         LectorFicheros.guardaUsr("Usuarios.txt", listaUsuarios);
         LectorFicheros.guardaPuntuaciones("Puntuaciones.txt", ranking);
         LectorFicheros.guardaPartidas("Partidas.txt", listaPartidas);
@@ -148,18 +150,18 @@ public class ControladorServidor
     public static void setRanking(ArrayList<String> ranking) {
         ControladorServidor.ranking = ranking;
     }
-    
+
     public boolean isActive() {
         return active;
     }
 
     public void setActive(boolean active) throws IOException {
         this.active = active;
-        
+
     }
-    
+
     public Thread getT() {
         return t;
     }
-    
+
 }
