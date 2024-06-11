@@ -7,8 +7,9 @@ package cliente.modelo;
 import java.util.ArrayList;
 
 /**
- *
- * @author javier
+ * Clase que contiene la lista con todos los usuarios registrados.
+ * @author Javier Zataraín
+ * @author Blanca Jorge
  */
 public class PaqueteUsr {
     private ArrayList listaUsuarios;
