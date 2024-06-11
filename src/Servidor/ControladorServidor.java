@@ -2,6 +2,7 @@ package Servidor;
 
 import java.io.IOException;
 import Servidor.paquetes.PaqueteLogin;
+import Servidor.ManejadorCliente;
 import Servidor.paquetes.PaquetePartida;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,12 +13,12 @@ public class ControladorServidor
         implements Runnable {
 
     private ServerSocket servidor;
-    HashMap<String, String> listaUsuarios = new HashMap<String, String>();
-    private static ArrayList<ManejadorCliente> listaManejadores = new ArrayList<>();
-    private static ArrayList<PaquetePartida> listaPartidas;
+    private static HashMap<String, String> listaUsuarios = new HashMap<String, String>();
+    private static ArrayList<ManejadorCliente> listaManejadores = new ArrayList<ManejadorCliente>();
+    private static ArrayList<PaquetePartida> listaPartidas = new ArrayList<PaquetePartida>();
     private static ArrayList<String> ranking;
     private Thread t;
-    private boolean active = true;
+    private volatile boolean active = true;
 
     public ControladorServidor() throws Exception {
         servidor = new ServerSocket(2000);
@@ -35,57 +36,19 @@ public class ControladorServidor
     public void startListeningUsers() throws Exception {
         setListaUsuarios(LectorFicheros.lecturaFichero("Usuarios.txt"));
         setRanking(LectorFicheros.lecturaPuntuaciones("Puntuaciones.txt"));
-        while (isActive()) {
-            System.out.println("Esperando clientes....");
-            Socket sck = servidor.accept();
-            System.out.println("Un cliente conectado...");
-            Runnable sirviente = () -> {
-                try {
-                    java.io.BufferedReader inred = new java.io.BufferedReader(new java.io.InputStreamReader(sck.getInputStream()));
-                    java.io.PrintStream outred = new java.io.PrintStream(sck.getOutputStream());
-                    String linea;
-                    DecodificadorLogin dec = new DecodificadorLogin();
-                    PaqueteLogin p;
-                    boolean correcto = false;
-                    while (((linea = inred.readLine()) != null) && (correcto == false)) {
-                        p = dec.decodificar(linea);
-                        if (p.getComprobado() == -1) {
-                            System.out.println("CREANDO USR");
-                            if (compruebaLogin(p.getUsuario(), p.getPassword()) != 1) {
-                                p.setComprobado(1);
-                                outred.println(p.toString());
-                                System.out.println("USR ya existente");
-
-                            } else {
-                                creaUsr(p.getUsuario(), p.getPassword());
-                                p.setComprobado(3);
-                                outred.println(p.toString());
-                                correcto = true;
-                                System.out.println("Creacion Correcta");
-
-                            }
-                        } else {
-                            p.setComprobado(compruebaLogin(p.getUsuario(), p.getPassword()));
-                            if (p.getComprobado() == 3) {
-                                correcto = true;
-                            }
-                            System.out.println("Comprobacion de usuario y contraseña");
-
-                            outred.println(p.toString());
-                        }
-                    }
-
-                } catch (java.io.IOException ioe) {
-                    System.err.println("Cerrando socket de cliente");
-                    ioe.printStackTrace(System.err);
-                }
-            };
-            Thread s = new Thread(sirviente, "Sirviente login");
-            s.start();
-
+        try {
+            while (isActive()) {
+                System.out.println("Esperando clientes....");
+                Socket sck = servidor.accept();
+                System.out.println("Un cliente conectado...");                    
+                ManejadorCliente manejador = new ManejadorCliente(sck);
+                listaManejadores.add(manejador);
+            }
+        } catch (java.net.SocketException se) {
+            // Si se lanza una SocketException, significa que el servidor se cerró
+            System.out.println("El servidor se ha detenido.");
         }
-        System.out.println("Servidor.ControladorServidor.startListeningUsers()");
-
+        System.out.println("server.ControladorServidor.startListeningUsers()");
     }
 
     public static void difusionMensaje(byte[] mensaje) {
@@ -99,11 +62,11 @@ public class ControladorServidor
         }
     }
 
-    public synchronized void creaUsr(String usr, String pwd) {
+    public static synchronized void creaUsr(String usr, String pwd) {
         listaUsuarios.put(usr, pwd);
     }
 
-    public int compruebaLogin(String usr, String pwd) {
+    public static int compruebaLogin(String usr, String pwd) {
         if (listaUsuarios.containsKey(usr) == false) {
             return 1;
         } else if (listaUsuarios.get(usr).equals(pwd) == false) {
@@ -117,6 +80,12 @@ public class ControladorServidor
         LectorFicheros.guardaUsr("Usuarios.txt", listaUsuarios);
         LectorFicheros.guardaPuntuaciones("Puntuaciones.txt", ranking);
         LectorFicheros.guardaPartidas("Partidas.txt", listaPartidas);
+    }
+
+    public void stopServidor() throws IOException {
+        setActive(false);
+        servidor.close(); // Close the ServerSocket
+        getT().interrupt();
     }
 
     public HashMap<String, String> getListaUsuarios() {
@@ -155,7 +124,7 @@ public class ControladorServidor
         return active;
     }
 
-    public void setActive(boolean active) throws IOException {
+    public void setActive(boolean active) {
         this.active = active;
 
     }
