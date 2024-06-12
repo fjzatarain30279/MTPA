@@ -25,16 +25,12 @@ public class Server {
             opcion = scanner.nextInt();
             switch (opcion) {
                 case 1:
-                    opcion1();
                     System.out.println(srv.getListaUsuarios().keySet().toString());
                     break;
                 case 2:
-                    opcion2();
                     break;
                 case 3:
-                    opcion3();
                     break;
-
                 case 0:
                     System.out.println("Saliendo del programa...");
                     srv.guardaDatos();
@@ -56,21 +52,5 @@ public class Server {
         System.out.println("3. Obtener listado de las partidas del servidor");
         System.out.println("4. Obtener Informacion de una partida concreta");
         System.out.println("0. Salir");
-    }
-
-    public static void opcion1() {
-        System.out.println("Has seleccionado la opción 1");
-        
-    }
-
-    public static void opcion2() {
-        System.out.println("Has seleccionado la opción 2");
-        // Agrega aquí el código correspondiente a la opción 2
-    }
-
-    public static void opcion3() {
-        System.out.println("Has seleccionado la opción 3");
-        // Agrega aquí el código correspondiente a la opción 3
-    }
-    
+    }  
 }
