@@ -15,6 +15,10 @@ public class DecodificadorLogin implements Decodificador{
     @Override
     public PaqueteLogin decodificar(String linea){
         PaqueteLogin p = new PaqueteLogin();
+        String[] aux = linea.split(";");
+        p.setUsuario(aux[0]);
+        p.setPassword(aux[1]);
+        p.setComprobado(Integer.parseInt(aux[2]));
         return p;
     }
 }

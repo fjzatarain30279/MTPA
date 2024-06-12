@@ -5,6 +5,8 @@
 package cliente.vista;
 
 import cliente.modelo.PaqueteUsr;
+import java.util.ArrayList;
+import javax.swing.ListModel;
 
 /**
  *
@@ -33,39 +35,60 @@ public class VistaUsuarios extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
-        jButton1 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.GridLayout(3, 0));
+        setMinimumSize(new java.awt.Dimension(828, 200));
+        setPreferredSize(new java.awt.Dimension(706, 300));
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel1.setFont(new java.awt.Font("Waree", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Lista de Usuarios conectados:");
         getContentPane().add(jLabel1);
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        jList1.setMinimumSize(new java.awt.Dimension(100, 100));
+        jList1.setPreferredSize(new java.awt.Dimension(100, 100));
         jScrollPane1.setViewportView(jList1);
 
         getContentPane().add(jScrollPane1);
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
+
+        jButton2.setText("Seleccionar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                seleccionarActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1);
+        jPanel2.add(jButton2);
+
+        jButton3.setText("Actualizar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton3);
+
+        getContentPane().add(jPanel2);
+
+        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
+        getContentPane().add(jPanel1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarActionPerformed
+        controlador.procesaEventoActualizar();
+    }//GEN-LAST:event_actualizarActionPerformed
+
+    private void seleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarActionPerformed
         controlador.procesaEventoSeleccion();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_seleccionarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -104,11 +127,20 @@ public class VistaUsuarios extends javax.swing.JFrame {
     public String getUsr(){
         return jList1.getSelectedValue();
     }
+    
+    public void actualizar(ArrayList<String> lista){
+        PaqueteUsr p = new PaqueteUsr();
+        p.setListaUsuarios(lista);
+        jList1.setModel((ListModel<String>) p);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JList<String> jList1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

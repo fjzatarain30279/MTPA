@@ -4,13 +4,37 @@
  */
 package Servidor.paquetes;
 
-import cliente.modelo.*;
 import java.util.ArrayList;
+import javax.swing.AbstractListModel;
 
 /**
  *
  * @author javier
  */
-public class PaqueteUsr {
-    private ArrayList listaUsuarios;
+public class PaqueteUsr extends AbstractListModel{
+    private ArrayList<String> listaUsuarios;
+
+    public ArrayList<String> getListaUsuarios() {
+        return listaUsuarios;
+    }
+
+    public void setListaUsuarios(ArrayList<String> listaUsuarios) {
+        this.listaUsuarios = listaUsuarios;
+    }
+    
+    public PaqueteUsr(){
+        listaUsuarios = new ArrayList<String>();
+    }
+    
+    @Override
+    public int getSize() {
+       return listaUsuarios.size();
+    }
+    
+    @Override
+    public String getElementAt(int indice) {
+      String usr = listaUsuarios.get(indice);
+      return usr;
+    }
+    
 }

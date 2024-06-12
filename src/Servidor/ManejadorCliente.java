@@ -57,6 +57,12 @@ public class ManejadorCliente
                     outred.println(p.toString());
                 }
             }
+            
+            
+            
+            
+            
+            
 
         } catch (java.io.IOException ioe) {
             System.err.println("Cerrando socket de cliente");

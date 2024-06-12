@@ -4,8 +4,13 @@
  */
 package cliente.vista;
 
+import Servidor.DecodificadorUsr;
 import cliente.main.Cliente;
 import cliente.modelo.PaqueteUsr;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.net.Socket;
+import javax.swing.ListModel;
 
 /**
  *
@@ -19,19 +24,33 @@ public class ControladorUsuarios {
     public ControladorUsuarios(VistaUsuarios vista) {
         this.vista = vista;
         modelo = Cliente.getModeloUsr();
+        
 
     }
     
     public void procesaEventoSeleccion(){
         
         try{
-            java.net.Socket miSocket = Cliente.getSocket();
-                java.io.PrintStream outred = new java.io.PrintStream(miSocket.getOutputStream());
-                outred.println(vista.getUsr()); // envia al servidor
-                //vista.setErrMessage("Envio correcto de datos...");
+            
             
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+    public void procesaEventoActualizar(){
+        java.io.PrintStream o = null;
+        DecodificadorUsr dec = new DecodificadorUsr();
+        try {
+            Socket miSocket = Cliente.getSocket();
+            o = new java.io.PrintStream(miSocket.getOutputStream());
+            o.println("SolicitudUsuarios");
+            BufferedReader inred = new java.io.BufferedReader(new java.io.InputStreamReader(miSocket.getInputStream()));
+            modelo.setListaUsuarios(dec.decodificar(inred.readLine()).getListaUsuarios());
+            vista.actualizar(modelo.getListaUsuarios());
+        } catch (IOException ex) {
+            
+
+        }
+        
     }
 }
